@@ -283,13 +283,13 @@
   height: 24px;
   margin: 0px 20px;
 }
-.submit-container {
+.chefportal-submit-container {
   display: flex;
   gap: 30px;
   margin: 60px auto;
 }
 
-.submit {
+.chefportal-submit {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -301,6 +301,60 @@
   font-size: 19px;
   font-weight: 700;
   cursor: pointer;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+  margin: 0 0 10px;
+  color: #333;
+}
+
+.modal-content p {
+  margin: 0 0 20px;
+  color: #555;
+}
+
+.modal-close {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.modal-close:hover {
+  background: #45a049;
 }
 
 .recipePage-container {
@@ -641,4 +695,249 @@
 .tags-Page h4 {
   font-size: 50px;
   color: #ecdfcc;
+}
+/* profile page */
+.ChefProfilePage-container {
+  background: #fff9c4;
+  background-image: none;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: none;
+  text-align: center;
+}
+
+.ChefProfilePage-content {
+  background: #fff9c4;
+  background-image: none;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.profile-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow: auto;
+  min-height: 100vh;
+}
+
+.profile-modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: auto;
+}
+
+.profile-modal-content h2 {
+  margin: 0 0 10px;
+  color: #333;
+}
+
+.profile-modal-content p {
+  margin: 0 0 20px;
+  color: #555;
+}
+
+.profile-modal-close {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.profile-modal-close:hover {
+  background: #45a049;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+.profile-sections {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.profile-display,
+.profile-edit,
+.recipe-upload {
+  flex: 1;
+  min-width: 250px;
+  max-width: 33%;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.profile-display {
+  text-align: center;
+}
+
+.profile-display h3 {
+  margin: 10px 0;
+  color: #333;
+}
+
+.profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 10px 0;
+}
+
+.profile-edit h3,
+.recipe-upload h3 {
+  margin: 0 0 10px;
+  color: #333;
+}
+
+.profile-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  background-color: white;
+}
+
+/* Optional: if no icon is present in some inputs, center-align content */
+.profile-input:not(:has(img.icon)) {
+  justify-content: flex-start;
+}
+
+.profile-input img.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.profile-input input,
+.profile-input textarea {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+}
+
+.profile-input textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.submit-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.submit {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.submit:hover {
+  background: #45a049;
+}
+
+.logout-container {
+  margin: 20px 0;
+}
+
+.logout {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.logout:hover {
+  background: #e53935;
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+  color: #777;
+  background: #f1f1f1;
+  margin-top: auto;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.login-link a {
+  color: #4caf50;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .profile-sections {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-display,
+  .profile-edit,
+  .recipe-upload {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .profile-input,
+  .submit {
+    font-size: 16px;
+  }
+
+  .profile-input img.icon {
+    width: 24px;
+    height: 24px;
+  }
 }

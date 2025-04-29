@@ -8,6 +8,8 @@ import RecipePage from "./RecipePage";
 import ChefPortal from "./ChefPortal";
 import NotFoundPage from "./NotFoundPage";
 import TagTemplate from "./TagTemplate";
+import SignUpPage from "./SignUpPage";
+import ChefProfilePage from "./ChefProfilePage";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -33,6 +35,8 @@ function App() {
           <Route path="/ChefPortal" element={<ChefPortal />} />
           <Route path="/NotFoundPage" element={<NotFoundPage />} />
           <Route path="/TagTemplate" element={<TagTemplate />} />
+          <Route path="/SignUpPage" element={<SignUpPage />} />
+          <Route path="/ChefProfilePage" element={<ChefProfilePage />} />
         </Routes>
       </main>
     </Router>

@@ -40,7 +40,7 @@ export default function ChefPortal() {
         throw new Error(data.message || "Login failed");
       }
       localStorage.setItem("token", data.token);
-      navigate("/profile/edit");
+      navigate("/ChefprofilePage");
     } catch (err) {
       setError(err.message);
     }
@@ -67,19 +67,7 @@ export default function ChefPortal() {
             <Link to="/ChefPortal">Chef Portal</Link>
           </li>
           {token ? (
-            <>
-              <li>
-                <button
-                  onClick={() => {
-                    localStorage.removeItem("token");
-                    navigate("/ChefPortal");
-                  }}
-                  className="auth-button"
-                >
-                  Logout
-                </button>
-              </li>
-            </>
+            <></>
           ) : (
             <>
               <li>
@@ -98,7 +86,7 @@ export default function ChefPortal() {
         <h1>Login</h1>
         <div className="portal-container">
           <div className="header">
-            <div className="text">Sign Up</div>
+            <div className="text">Login</div>
             <div className="underline"></div>
           </div>
           {error && <p className="error">{error}</p>}
@@ -128,14 +116,14 @@ export default function ChefPortal() {
             <div className="forgot-password">
               Lost Password? <Link to="/forgot-password">Click Here!</Link>
             </div>
-            <div className="submit-container">
-              <button type="submit" className="submit">
+            <div className="chefportal-submit-container">
+              <button type="submit" className="chefportal-submit">
                 Login
               </button>
             </div>
           </form>
           <p>
-            Don't have an account? <Link to="/register">Sign Up</Link>
+            Don't have an account? <Link to="/SignUpPage">Sign Up</Link>
           </p>
         </div>
       </div>

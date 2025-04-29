@@ -1,0 +1,347 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./index.css";
+import email_icon from "./assets/emailicon.png";
+import recipe_icon from "./assets/recipeicon.png";
+
+export default function ChefProfilePage() {
+  const [profile, setProfile] = useState({ fullName: "", profileImage: "" });
+  const [recipe, setRecipe] = useState({
+    title: "",
+    ingredients: "",
+    instructions: "",
+    prepTime: "",
+    cookTime: "",
+    tags: "",
+    image: null,
+  });
+  const [editProfile, setEditProfile] = useState({
+    fullName: "",
+    profileImage: null,
+  });
+  const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!token) {
+        setError("Please log in to view your profile");
+        navigate("/ChefPortal");
+        return;
+      }
+      try {
+        const response = await fetch("http://localhost:8080/api/users", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          if (response.status === 401 || response.status === 403) {
+            setError("Session expired. Please log in again.");
+            localStorage.removeItem("token");
+            navigate("/ChefPortal");
+            return;
+          }
+          throw new Error(data.message || "Failed to fetch profile");
+        }
+        setProfile({
+          fullName: data.fullName || "",
+          profileImage: data.profileImage || "",
+        });
+        setEditProfile({ fullName: data.fullName || "", profileImage: null });
+      } catch (err) {
+        setError(
+          err.message || "Failed to fetch profile. Server may be unreachable."
+        );
+      }
+    };
+    fetchProfile();
+  }, [token, navigate]);
+
+  const handleProfileChange = (e) => {
+    const { name, value, files } = e.target;
+    setEditProfile((prev) => ({
+      ...prev,
+      [name]: files ? files[0] : value,
+    }));
+    setError("");
+  };
+
+  const handleRecipeChange = (e) => {
+    const { name, value, files } = e.target;
+    setRecipe((prev) => ({
+      ...prev,
+      [name]: files ? files[0] : value,
+    }));
+    setError("");
+  };
+
+  const handleProfileSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!editProfile.fullName && !editProfile.profileImage) {
+      setError("Please provide a full name or profile image");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("fullName", editProfile.fullName || "");
+    if (editProfile.profileImage)
+      formData.append("profileImage", editProfile.profileImage);
+
+    console.log("FormData:", Object.fromEntries(formData));
+
+    try {
+      const response = await fetch("http://localhost:8080/api/profile", {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          setError("Session expired. Please log in again.");
+          localStorage.removeItem("token");
+          navigate("/ChefPortal");
+          return;
+        }
+        throw new Error(data.message || "Failed to update profile");
+      }
+      setProfile({ fullName: data.fullName, profileImage: data.profileImage });
+      setEditProfile({ fullName: data.fullName, profileImage: null });
+      setModalMessage("Profile updated successfully!");
+      setShowModal(true);
+    } catch (err) {
+      setError(
+        err.message || "Failed to update profile. Server may be unreachable."
+      );
+    }
+  };
+
+  const handleRecipeSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    const { title, ingredients, instructions, prepTime, cookTime, tags } =
+      recipe;
+    if (!title || !ingredients || !instructions) {
+      setError("All required recipe fields must be filled out.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("ingredients", ingredients);
+    formData.append("instructions", instructions);
+    formData.append("prepTime", prepTime);
+    formData.append("cookTime", cookTime);
+    formData.append("tags", tags);
+    if (recipe.image) formData.append("image", recipe.image);
+
+    try {
+      const response = await fetch("http://localhost:8080/api/recipes", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          setError("Session expired. Please log in again.");
+          localStorage.removeItem("token");
+          navigate("/ChefPortal");
+          return;
+        }
+        throw new Error(data.message || "Failed to upload recipe");
+      }
+      setRecipe({
+        title: "",
+        ingredients: "",
+        instructions: "",
+        prepTime: "",
+        cookTime: "",
+        tags: "",
+        image: null,
+      });
+      setModalMessage("Recipe uploaded successfully!");
+      setShowModal(true);
+    } catch (err) {
+      setError(
+        err.message || "Failed to upload recipe. Server may be unreachable."
+      );
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/ChefPortal");
+  };
+
+  const closeModal = () => setShowModal(false);
+
+  return (
+    <div className="ChefProfilePage-container">
+      <div className="ChefProfilePage-content">
+        <div className="ChefProfilePage-container">
+          <div className="header">
+            <div className="text">Your Profile</div>
+            <div className="underline"></div>
+          </div>
+
+          {error && <p className="error">{error}</p>}
+
+          <div className="profile-sections">
+            {/* Profile Display */}
+            <div className="profile-display">
+              <h3>{profile.fullName || "No name set"}</h3>
+              {profile.profileImage ? (
+                <img
+                  src={profile.profileImage}
+                  alt="Profile"
+                  className="profile-image"
+                />
+              ) : (
+                <p>No profile image set</p>
+              )}
+            </div>
+
+            {/* Edit Profile Form */}
+            <div className="profile-edit">
+              <h3>Edit Profile</h3>
+              <form onSubmit={handleProfileSubmit} className="inputs">
+                <div className="input">
+                  <img src={email_icon} alt="Full Name" className="icon" />
+                  <input
+                    type="text"
+                    name="fullName"
+                    placeholder="Full Name"
+                    value={editProfile.fullName}
+                    onChange={handleProfileChange}
+                  />
+                </div>
+                <div className="input">
+                  <input
+                    type="file"
+                    name="profileImage"
+                    accept="image/*"
+                    onChange={handleProfileChange}
+                  />
+                </div>
+                <div className="submit-container">
+                  <button type="submit" className="submit">
+                    Update Profile
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* Upload Recipe Form */}
+            <div className="recipe-upload">
+              <h3>Upload a Recipe</h3>
+              <form onSubmit={handleRecipeSubmit} className="profile-inputs">
+                <div className="profile-input">
+                  <img src={recipe_icon} alt="Title" className="icon" />
+                  <input
+                    type="text"
+                    name="title"
+                    placeholder="Recipe Title"
+                    value={recipe.title}
+                    onChange={handleRecipeChange}
+                    required
+                  />
+                </div>
+                <div className="profile-input">
+                  <textarea
+                    name="ingredients"
+                    placeholder="Ingredients (one per line)"
+                    value={recipe.ingredients}
+                    onChange={handleRecipeChange}
+                    required
+                  />
+                </div>
+                <div className="profile-input">
+                  <textarea
+                    name="instructions"
+                    placeholder="Instructions"
+                    value={recipe.instructions}
+                    onChange={handleRecipeChange}
+                    required
+                  />
+                </div>
+                <div className="profile-input">
+                  <input
+                    type="text"
+                    name="prepTime"
+                    placeholder="Prep Time (e.g. 15 mins)"
+                    value={recipe.prepTime}
+                    onChange={handleRecipeChange}
+                  />
+                </div>
+                <div className="profile-input">
+                  <input
+                    type="text"
+                    name="cookTime"
+                    placeholder="Cook Time (e.g. 30 mins)"
+                    value={recipe.cookTime}
+                    onChange={handleRecipeChange}
+                  />
+                </div>
+                <div className="profile-input">
+                  <input
+                    type="text"
+                    name="tags"
+                    placeholder="Tags (comma separated)"
+                    value={recipe.tags}
+                    onChange={handleRecipeChange}
+                  />
+                </div>
+                <div className="profile-input">
+                  <input
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    onChange={handleRecipeChange}
+                  />
+                </div>
+                <div className="submit-container">
+                  <button type="submit" className="submit">
+                    Upload Recipe
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div className="logout-container">
+            <button className="logout" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {showModal && (
+        <div className="profile-modal">
+          <div className="profile-modal-content">
+            <h2>Success!</h2>
+            <p>{modalMessage}</p>
+            <button onClick={closeModal} className="profile-modal-close">
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+
+      <footer className="footer">
+        <p>© {new Date().getFullYear()} Chef App. All rights reserved.</p>
+      </footer>
+    </div>
+  );
+}

@@ -66,18 +66,7 @@ export default function ChefPortal() {
           <li>
             <Link to="/ChefPortal">Chef Portal</Link>
           </li>
-          {token ? (
-            <></>
-          ) : (
-            <>
-              <li>
-                <Link to="/login">Login</Link>
-              </li>
-              <li>
-                <Link to="/register">Register</Link>
-              </li>
-            </>
-          )}
+          {token ? <></> : <></>}
         </ul>
       </nav>
 

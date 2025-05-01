@@ -10,8 +10,8 @@ export default function ChefProfilePage() {
     title: "",
     ingredients: "",
     instructions: "",
-    prepTime: "",
-    cookTime: "",
+    prep_time: "",
+    cook_time: "",
     tags: "",
     image: null,
   });
@@ -46,6 +46,7 @@ export default function ChefProfilePage() {
           }
           throw new Error(data.message || "Failed to fetch profile");
         }
+        console.log("Fetched profile:", data);
         setProfile({
           fullName: data.fullName || "",
           profileImage: data.profileImage || "",
@@ -62,6 +63,28 @@ export default function ChefProfilePage() {
 
   const handleProfileChange = (e) => {
     const { name, value, files } = e.target;
+    if (files) {
+      const file = files[0];
+      if (file.size > 5 * 1024 * 1024) {
+        setError("File size exceeds 5MB limit.");
+        return;
+      }
+      const allowedTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
+      ];
+      if (!allowedTypes.includes(file.type)) {
+        setError("Only JPG, JPEG, PNG, and GIF files are allowed.");
+        return;
+      }
+      console.log("Profile image selected:", {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      });
+    }
     setEditProfile((prev) => ({
       ...prev,
       [name]: files ? files[0] : value,
@@ -71,6 +94,28 @@ export default function ChefProfilePage() {
 
   const handleRecipeChange = (e) => {
     const { name, value, files } = e.target;
+    if (files) {
+      const file = files[0];
+      if (file.size > 5 * 1024 * 1024) {
+        setError("File size exceeds 5MB limit.");
+        return;
+      }
+      const allowedTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
+      ];
+      if (!allowedTypes.includes(file.type)) {
+        setError("Only JPG, JPEG, PNG, and GIF files are allowed.");
+        return;
+      }
+      console.log("Recipe image selected:", {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      });
+    }
     setRecipe((prev) => ({
       ...prev,
       [name]: files ? files[0] : value,
@@ -89,13 +134,14 @@ export default function ChefProfilePage() {
 
     const formData = new FormData();
     formData.append("fullName", editProfile.fullName || "");
-    if (editProfile.profileImage)
-      formData.append("profileImage", editProfile.profileImage);
+    if (editProfile.profileImage) {
+      formData.append("image", editProfile.profileImage); // Changed to match backend
+    }
 
-    console.log("FormData:", Object.fromEntries(formData));
+    console.log("Sending Profile FormData:", Object.fromEntries(formData));
 
     try {
-      const response = await fetch("http://localhost:8080/api/profile", {
+      const response = await fetch("http://localhost:8080/api/users", {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -113,6 +159,7 @@ export default function ChefProfilePage() {
         }
         throw new Error(data.message || "Failed to update profile");
       }
+      console.log("Updated profile:", data);
       setProfile({ fullName: data.fullName, profileImage: data.profileImage });
       setEditProfile({ fullName: data.fullName, profileImage: null });
       setModalMessage("Profile updated successfully!");
@@ -128,10 +175,17 @@ export default function ChefProfilePage() {
     e.preventDefault();
     setError("");
 
-    const { title, ingredients, instructions, prepTime, cookTime, tags } =
-      recipe;
+    const {
+      title,
+      ingredients,
+      instructions,
+      prep_time,
+      cook_time,
+      tags,
+      image,
+    } = recipe;
     if (!title || !ingredients || !instructions) {
-      setError("All required recipe fields must be filled out.");
+      setError("Title, ingredients, and instructions are required.");
       return;
     }
 
@@ -139,10 +193,17 @@ export default function ChefProfilePage() {
     formData.append("title", title);
     formData.append("ingredients", ingredients);
     formData.append("instructions", instructions);
-    formData.append("prepTime", prepTime);
-    formData.append("cookTime", cookTime);
-    formData.append("tags", tags);
-    if (recipe.image) formData.append("image", recipe.image);
+    formData.append("prepTime", prep_time || ""); // Ensure empty string if not provided
+    formData.append("cookTime", cook_time || ""); // Ensure empty string if not provided
+    formData.append("tags", tags || "");
+    if (image) {
+      formData.append("image", image);
+    }
+
+    console.log("Sending Recipe FormData:");
+    for (const pair of formData.entries()) {
+      console.log(`  ${pair[0]}: ${pair[1]}`);
+    }
 
     try {
       const response = await fetch("http://localhost:8080/api/recipes", {
@@ -161,21 +222,20 @@ export default function ChefProfilePage() {
         }
         throw new Error(data.message || "Failed to upload recipe");
       }
+
       setRecipe({
         title: "",
         ingredients: "",
         instructions: "",
-        prepTime: "",
-        cookTime: "",
+        prep_time: "",
+        cook_time: "",
         tags: "",
         image: null,
       });
       setModalMessage("Recipe uploaded successfully!");
       setShowModal(true);
     } catch (err) {
-      setError(
-        err.message || "Failed to upload recipe. Server may be unreachable."
-      );
+      setError(err.message || "Failed to upload recipe.");
     }
   };
 
@@ -201,12 +261,21 @@ export default function ChefProfilePage() {
             {/* Profile Display */}
             <div className="profile-display">
               <h3>{profile.fullName || "No name set"}</h3>
+              {profile.fullName ? (
+                <p>Welcome, {profile.fullName}!</p>
+              ) : (
+                <p>Please set your full name.</p>
+              )}
               {profile.profileImage ? (
-                <img
-                  src={profile.profileImage}
-                  alt="Profile"
-                  className="profile-image"
-                />
+                <>
+                  <p>Profile Image URL: {profile.profileImage}</p>
+                  <img
+                    src={profile.profileImage}
+                    alt="Profile"
+                    className="profile-image"
+                    onError={(e) => console.log("Image load error:", e)}
+                  />
+                </>
               ) : (
                 <p>No profile image set</p>
               )}

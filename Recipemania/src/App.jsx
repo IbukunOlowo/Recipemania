@@ -10,6 +10,8 @@ import NotFoundPage from "./NotFoundPage";
 import TagTemplate from "./TagTemplate";
 import SignUpPage from "./SignUpPage";
 import ChefProfilePage from "./ChefProfilePage";
+import RecipeDetailsPage from "./RecipeDetailsPage";
+import ChefDetailsPage from "./ChefDetailsPage";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -37,6 +39,11 @@ function App() {
           <Route path="/TagTemplate" element={<TagTemplate />} />
           <Route path="/SignUpPage" element={<SignUpPage />} />
           <Route path="/ChefProfilePage" element={<ChefProfilePage />} />
+          <Route
+            path="/RecipeDetailsPage/:id"
+            element={<RecipeDetailsPage />}
+          />
+          <Route path="/ChefDetailsPage/:id" element={<ChefDetailsPage />} />
         </Routes>
       </main>
     </Router>

@@ -18,7 +18,7 @@ export default function ChefPage() {
   useEffect(() => {
     const fetchChefs = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/chefs");
+        const response = await axios.get("http://localhost:8080/api/users/all");
         setChefs(response.data);
       } catch (error) {
         console.error("Error fetching chefs:", error);
@@ -56,58 +56,58 @@ export default function ChefPage() {
         <h1>Chef Page</h1>
         <p>Meet our talented chefs!</p>
         <div className="chef-container">
-          <Link to="/chef/1" className="chef-card">
+          <Link to="/ChefDetailsPage/1" className="chef-card">
             <img src={chef1Image} alt="Chef 1" className="chef-img" />
-            <h2 className="chef-name">{chefs[0]?.name}</h2>
-            <p className="chef-description">{chefs[0]?.description}</p>
+            <h2 className="chef-name">{chefs[0]?.fullName}</h2>
+            <p className="chef-description">{chefs[0]?.bio}</p>
           </Link>
 
-          <Link to="/chef/2" className="chef-card">
+          <Link to="/ChefDetailsPage/2" className="chef-card">
             <img src={chef2Image} alt="Chef 2" className="chef-img" />
-            <h2 className="chef-name">{chefs[1]?.name}</h2>
-            <p className="chef-description">{chefs[1]?.description}</p>
+            <h2 className="chef-name">{chefs[1]?.fullName}</h2>
+            <p className="chef-description">{chefs[1]?.bio}</p>
           </Link>
 
-          <Link to="/chef/3" className="chef-card">
+          <Link to="/ChefDetailsPage/3" className="chef-card">
             <img src={chef3Image} alt="Chef 3" className="chef-img" />
-            <h2 className="chef-name">{chefs[2]?.name}</h2>
-            <p className="chef-description">{chefs[2]?.description}</p>
+            <h2 className="chef-name">{chefs[2]?.fullName}</h2>
+            <p className="chef-description">{chefs[2]?.bio}</p>
           </Link>
 
-          <Link to="/chef/4" className="chef-card">
+          <Link to="/ChefDetailsPage/4" className="chef-card">
             <img src={chef4Image} alt="Chef 4" className="chef-img" />
-            <h2 className="chef-name">{chefs[3]?.name}</h2>
-            <p className="chef-description">{chefs[3]?.description}</p>
+            <h2 className="chef-name">{chefs[3]?.fullName}</h2>
+            <p className="chef-description">{chefs[3]?.bio}</p>
           </Link>
 
-          <Link to="/chef/5" className="chef-card">
+          <Link to="/ChefDetailsPage/5" className="chef-card">
             <img src={chef5Image} alt="Chef 5" className="chef-img" />
-            <h2 className="chef-name">{chefs[4]?.name}</h2>
-            <p className="chef-description">{chefs[4]?.description}</p>
+            <h2 className="chef-name">{chefs[4]?.fullName}</h2>
+            <p className="chef-description">{chefs[4]?.bio}</p>
           </Link>
 
-          <Link to="/chef/6" className="chef-card">
+          <Link to="/ChefDetailsPage/6" className="chef-card">
             <img src={chef6Image} alt="Chef 6" className="chef-img" />
-            <h2 className="chef-name">{chefs[5]?.name}</h2>
-            <p className="chef-description">{chefs[5]?.description}</p>
+            <h2 className="chef-name">{chefs[5]?.fullName}</h2>
+            <p className="chef-description">{chefs[5]?.bio}</p>
           </Link>
 
-          <Link to="/chef/7" className="chef-card">
+          <Link to="/ChefDetailsPage/7" className="chef-card">
             <img src={chef7Image} alt="Chef 7" className="chef-img" />
-            <h2 className="chef-name">{chefs[6]?.name}</h2>
-            <p className="chef-description">{chefs[6]?.description}</p>
+            <h2 className="chef-name">{chefs[6]?.fullName}</h2>
+            <p className="chef-description">{chefs[6]?.bio}</p>
           </Link>
 
-          <Link to="/chef/8" className="chef-card">
+          <Link to="/ChefDetailsPage/8" className="chef-card">
             <img src={chef8Image} alt="Chef 8" className="chef-img" />
-            <h2 className="chef-name">{chefs[7]?.name}</h2>
-            <p className="chef-description">{chefs[7]?.description}</p>
+            <h2 className="chef-name">{chefs[7]?.fullName}</h2>
+            <p className="chef-description">{chefs[7]?.bio}</p>
           </Link>
 
-          <Link to="/chef/9" className="chef-card">
+          <Link to="/ChefDetailsPage/9" className="chef-card">
             <img src={chef9Image} alt="Chef 9" className="chef-img" />
-            <h2 className="chef-name">{chefs[8]?.name}</h2>
-            <p className="chef-description">{chefs[8]?.description}</p>
+            <h2 className="chef-name">{chefs[8]?.fullName}</h2>
+            <p className="chef-description">{chefs[8]?.bio}</p>
           </Link>
         </div>
       </main>
